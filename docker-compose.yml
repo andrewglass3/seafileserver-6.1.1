@@ -16,7 +16,7 @@ services:
   volumes:
     - ./store:/seafile
 
-  haproxy:
+ haproxy:
     image: jclebreton/https-proxy
     container_name: haproxy
     restart: always
