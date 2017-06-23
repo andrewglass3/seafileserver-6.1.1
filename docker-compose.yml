@@ -16,16 +16,17 @@ services:
   volumes:
     - ./store:/seafile
 
- haproxy:
-    image: jclebreton/https-proxy
-    container_name: haproxy
+ nginx:
+    image: nginx
+    container_name: nginx
     restart: always
     ports:
       - 443:443
+      - 80:80
     links:
       - app
     depends_on:
       - app
-    environment:
-      - BACKEND_SERVER=app
-      - BACKEND_PORT=8000
+    volumes:
+      - ./store/nginx.conf:/etc/nginx/nginx.conf:ro
+
