@@ -9,21 +9,23 @@ services:
   - 8082:8082
   environment:
       - SEAFILE_NAME=seafilebox
-      - SEAFILE_ADDRESS=<ip here>
-      - SEAFILE_ADMIN=<email adddy here>
-      - SEAFILE_ADMIN_PW=<passwd here>
+      - SEAFILE_ADDRESS=127.0.0.1
+      - SEAFILE_ADMIN=admin
+      - SEAFILE_ADMIN_PW=admin
 
   volumes:
-    - /home/aglass/seafileserver/seafile:/seafile
+    - ./store:/seafile
 
- apache:
-   image: eboraas/apache
-   container_name: apache
-   restart: always
-   depends_on:
-     - app
-   links:
-    - app
-#   ports:
-#     - 8000:8000
-#     - 8082:8082
+  haproxy:
+    image: jclebreton/https-proxy
+    container_name: haproxy
+    restart: always
+    ports:
+      - 443:443
+    links:
+      - app
+    depends_on:
+      - app
+    environment:
+      - BACKEND_SERVER=app
+      - BACKEND_PORT=8000
